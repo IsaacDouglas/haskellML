@@ -6,21 +6,26 @@ type Instance = ([Feature], Class)
 
 data DataSet = DataSet [Instance] deriving (Show, Eq)
 
+-- | DataSet vazio
 initDataSet :: DataSet
 initDataSet = DataSet []
 
+-- | Insere uma Instance em um DataSet
 insert :: DataSet -> Instance -> DataSet
 insert (DataSet []) i = DataSet [i]
 insert (DataSet d) i = DataSet (i:d)
 
+-- | Cria um DataSet a partir de uma String
 makeDataSet :: String -> DataSet
 makeDataSet s = DataSet [makeInstance x | x <- (split s ';')]
 
+-- | Cria uma Instance a partir de uma String
 makeInstance :: String -> Instance
 makeInstance s = ([(read x :: Float) | x<- (take (length f - 1) f)], last f)
                 where
                     f = split s ','
 
+-- | Separa uma String em uma lista de String por um Char passado
 split :: String -> Char -> [String]
 split [] _ = []
 split s c = takeWhile (/= c) s : split rest c
@@ -33,15 +38,19 @@ iris = "5.1,3.5,1.4,0.2,Iris-setosa;4.9,3.0,1.4,0.2,Iris-setosa;4.7,3.2,1.3,0.2,
 irisDataSet :: DataSet
 irisDataSet = makeDataSet iris
 
+-- | Separa do DataSet a lista de Feature
 dataSetX :: DataSet -> [[Feature]]
 dataSetX (DataSet d) = [ x | (x, y) <- d ]
 
+-- | Separa do DataSet a lista de Class
 dataSetY :: DataSet -> [Class]
 dataSetY (DataSet d) = [ y | (x, y) <- d ]
 
+-- | Retorna um DataSet só com a Class escolhida 
 dataSetByClass :: DataSet -> Class -> DataSet
 dataSetByClass (DataSet d) s = DataSet [ (x, y) | (x, y) <- d, y==s ]
 
+-- | Retorna todas as Class do DataSet
 getClass :: DataSet -> [Class]
 getClass d = aux (dataSetY d) []
           where
@@ -49,6 +58,7 @@ getClass d = aux (dataSetY d) []
             aux (x:xs) l | elem x l = aux xs l
                            | otherwise = aux xs (x:l)
           
+-- | Retorna uma lista contendo todos os DataSet de cada Class do DataSet original
 splitByClass :: DataSet -> [DataSet]
 splitByClass d = [ (dataSetByClass d x) | x <- class' ]
           where
