@@ -4,7 +4,7 @@ type Feature = Float
 type Class = String
 type Instance = ([Feature], Class)
 
-data DataSet = DataSet [Instance] deriving (Show)
+data DataSet = DataSet [Instance] deriving (Show, Eq)
 
 initDataSet :: DataSet
 initDataSet = DataSet []
@@ -38,3 +38,18 @@ dataSetX (DataSet d) = [ x | (x, y) <- d ]
 
 dataSetY :: DataSet -> [Class]
 dataSetY (DataSet d) = [ y | (x, y) <- d ]
+
+dataSetByClass :: DataSet -> Class -> DataSet
+dataSetByClass (DataSet d) s = DataSet [ (x, y) | (x, y) <- d, y==s ]
+
+getClass :: DataSet -> [Class]
+getClass d = aux (dataSetY d) []
+          where
+            aux [] l = l
+            aux (x:xs) l | elem x l = aux xs l
+                           | otherwise = aux xs (x:l)
+          
+splitByClass :: DataSet -> [DataSet]
+splitByClass d = [ (dataSetByClass d x) | x <- class' ]
+          where
+            class' = getClass d
