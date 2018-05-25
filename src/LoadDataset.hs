@@ -56,7 +56,7 @@ getClass d = aux (dataSetY d) []
           where
             aux [] l = l
             aux (x:xs) l | elem x l = aux xs l
-                           | otherwise = aux xs (x:l)
+                        | otherwise = aux xs (x:l)
           
 -- | Retorna uma lista contendo todos os DataSet de cada Class do DataSet original
 splitByClass :: DataSet -> [DataSet]
