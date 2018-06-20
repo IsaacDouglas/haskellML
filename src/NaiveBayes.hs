@@ -22,13 +22,13 @@ teste :: String
 teste = "6,180,12,male;5.92,190,11,male;5.58,170,12,male;5.92,165,10,male;5,100,6,female;5.5,150,8,female;5.42,130,7,female;5.75,150,9,female"
 
 testeDS :: DataSet
-testeDS = makeDataSet teste
+testeDS = makeDataSet teste ';'
 
 teste2 :: String
 teste2 = "-3,7,3;1,5,3;1,2,3;-2,0,3;2,3,4;-4,0,3;-1,1,3;1,1,4;-2,2,3;2,7,4;-4,1,4;-2,7,4"
 
 teste2DS :: DataSet
-teste2DS = makeDataSet teste2
+teste2DS = makeDataSet teste2 ';'
 
 type PairMV = (Float, Float)
 type NaiveInstance = ([PairMV], Float, Class) 
