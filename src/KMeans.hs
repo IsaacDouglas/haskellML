@@ -1,11 +1,12 @@
 module KMeans where
 
 import LoadDataset
+import Data.KMeans (kmeans)
 
-type Example = [Feature]
-type Centroid = [Feature]
+mapToFrac :: [[Feature]] -> [[Double]]
+mapToFrac = map (map realToFrac)
 
--- | Computa a distância 📏 entre duas instâncias
-distance :: Example -> Example -> Float
-distance x1 x2 = sqrt . sum . map (\(a, b) -> (a - b) ^ 2) . zip x1 $ x2
-
+runKM :: Int -> [[Feature]] -> [[[Double]]]
+runKM k dt = kmeans k dataset
+    where
+        dataset = mapToFrac dt

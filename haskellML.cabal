@@ -20,4 +20,4 @@ executable haskellML
   build-depends:       base >= 4.7 && < 5
                      , random
                      , vector
-                     , Chart
+                     , kmeans
