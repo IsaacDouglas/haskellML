@@ -137,8 +137,8 @@ checkPredicts2 :: ([Feature] -> Class) -> DataSet -> [(Instance, Class)]
 checkPredicts2 f (DataSet d) = [ (b, f (fst b)) | b <- d ]
 
 -- | Calcula a acuracia
-acurracy :: ([Feature] -> Class) -> DataSet -> Float
-acurracy f (DataSet d) = fromIntegral (length (filter (\x -> x) (checkPredicts f (DataSet d)))) / fromIntegral (length d)
+precision :: ([Feature] -> Class) -> DataSet -> Float
+precision f (DataSet d) = fromIntegral (length (filter (\x -> x) (checkPredicts f (DataSet d)))) / fromIntegral (length d)
 
 -- | Remove determinados Char de uma String
 dropStr :: String -> [Char] -> String

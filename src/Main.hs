@@ -26,8 +26,11 @@ main = do
   -- Treina o NaiveBayes
   let predict = predictNaive train
 
-  -- | Mostra a acuracia
-  print $ acurracy predict test
+  -- | Mostra a precisao
+  print $ precision predict test
+
+  -- let bool = checkPredicts predict $ test
+  -- let filterr = zip bool test
 
   -- | Escreve no arquivo o DataSet de teste
   writeFile "data/out.data" (intercalate "\n" $ printDataSet test)
@@ -37,8 +40,8 @@ main = do
   -- print $ predict [6.4,3.1,5.5,1.8] -- Iris-virginica
   -- print $ predict [5.9,3.2,4.8,1.8] -- Iris-versicolor classificou como Iris-virginica
   
-  -- print $ sizeDS $ fst tupla 
-  -- print $ sizeDS $ snd tupla 
-  -- print $ checkPredicts predict $ fst tupla
-  -- print $ checkPredicts2 predict $ fst tupla
+  -- print $ sizeDS $ test
+  -- print $ sizeDS $ train
+  -- print $ checkPredicts predict $ test
+  -- print $ checkPredicts2 predict $ test
   return ()
