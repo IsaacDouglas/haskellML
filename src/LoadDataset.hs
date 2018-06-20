@@ -82,6 +82,22 @@ splitByClass d = [ (dataSetByClass d x) | x <- class' ]
 splitDataSet :: DataSet -> [Integer] -> (DataSet, DataSet)
 splitDataSet (DataSet d) v = (DataSet (addList d v 1), DataSet (subList d v 1))
 
+printInstance :: Instance -> String
+printInstance i = dropStr (show i) ['"', ']', '[', ')', '(']
+
+printDataSet :: DataSet -> [String]
+printDataSet (DataSet d) = [ printInstance i | i <- d ]
+
+-- | Mostra uma lista de Instance na tela
+printElements :: [Instance] -> IO()
+printElements [] = return ()
+printElements (x:xs) = do putStrLn $ dropStr (show x) ['"', ']', '[', ')', '(']
+                          printElements xs
+
+-- | Recebe um DataSet e retorna a lista de Instance
+listInstance :: DataSet -> [Instance]
+listInstance (DataSet d) = d 
+
 -- | Tamanho do DataSet
 sizeDS :: DataSet -> Integer
 sizeDS (DataSet x) = fromIntegral $ length x
@@ -104,7 +120,6 @@ subList (x:xs) (y:ys) v | y == v = subList xs ys (v+1)
 ordRandom :: Float -> Integer -> IO [Integer]               
 ordRandom p n = do 
   g <- newStdGen
-  
   let prob = floor $ (fromIntegral n) * p
   let num = nub $ sort $ take prob (randomRs (1 :: Integer, n :: Integer) g)
   return num
@@ -124,3 +139,15 @@ checkPredicts2 f (DataSet d) = [ (b, f (fst b)) | b <- d ]
 -- | Calcula a acuracia
 acurracy :: ([Feature] -> Class) -> DataSet -> Float
 acurracy f (DataSet d) = fromIntegral (length (filter (\x -> x) (checkPredicts f (DataSet d)))) / fromIntegral (length d)
+
+-- | Remove determinados Char de uma String
+dropStr :: String -> [Char] -> String
+dropStr [] _ = []
+dropStr (x:xs) c | contains x c = dropStr xs c
+                 | otherwise = x: (dropStr xs c)
+
+-- | Verifica se um Char pertence a uma lista de Char
+contains :: Char -> [Char] -> Bool
+contains c [] = False
+contains c (x:xs) | c == x = True
+                  | otherwise = contains c xs
