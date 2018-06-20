@@ -61,7 +61,7 @@ proPosterior f (p, pri, c) = ((aux f (p, pri, c)), c)
 probClass :: [Feature] -> NaiveData -> [Prob]
 probClass f (NaiveData n) = [ (proPosterior f x) | x <- n ]
 
--- | 
+-- | Treina a rede
 predictNaive :: DataSet -> [Feature] -> Class
 predictNaive d f = snd (maxP (probClass f (makeNaiveData  d)))
 

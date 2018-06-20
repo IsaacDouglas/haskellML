@@ -1,5 +1,8 @@
 module LoadDataset where
 
+import System.Random (newStdGen, randomRs)
+import Data.List (sort, nub)
+
 type Feature = Float
 type Class = String
 type Instance = ([Feature], Class)
@@ -73,3 +76,51 @@ splitByClass :: DataSet -> [DataSet]
 splitByClass d = [ (dataSetByClass d x) | x <- class' ]
           where
             class' = getClass d
+
+
+-- | Split DataSet (Teste, Treinamento)
+splitDataSet :: DataSet -> [Integer] -> (DataSet, DataSet)
+splitDataSet (DataSet d) v = (DataSet (addList d v 1), DataSet (subList d v 1))
+
+-- | Tamanho do DataSet
+sizeDS :: DataSet -> Integer
+sizeDS (DataSet x) = fromIntegral $ length x
+
+-- | Retorna a lista contendo os valores das posicoes passadas
+addList :: [l] -> [Integer] -> Integer -> [l]
+addList [] _ _ = []
+addList _ [] _ = []
+addList (x:xs) (y:ys) v | y == v = x : addList xs ys (v+1)
+                        | otherwise = addList xs (y:ys) (v+1)
+
+-- | Retorna a lista sem os valores das posicoes passadas                        
+subList :: [l] -> [Integer] -> Integer -> [l]
+subList [] _ _ = []
+subList l [] _ = l
+subList (x:xs) (y:ys) v | y == v = subList xs ys (v+1)
+                        | otherwise = x : subList xs (y:ys) (v+1)
+
+-- | Retorna uma lista de valores aleatorios sem repeticao
+ordRandom :: Float -> Integer -> IO [Integer]               
+ordRandom p n = do 
+  g <- newStdGen
+  
+  let prob = floor $ (fromIntegral n) * p
+  let num = nub $ sort $ take prob (randomRs (1 :: Integer, n :: Integer) g)
+  return num
+
+-- | Verifica se a predicao foi correta
+checkPredict :: ([Feature] -> Class) -> Instance -> Bool
+checkPredict f i = f (fst i) == snd i
+
+-- | Verifica uma lista de de predicao
+checkPredicts :: ([Feature] -> Class) -> DataSet -> [Bool]
+checkPredicts f (DataSet d) = [ f (fst b) == snd b | b <- d ]
+
+-- | Verifica a predicao com as classes
+checkPredicts2 :: ([Feature] -> Class) -> DataSet -> [(Instance, Class)]
+checkPredicts2 f (DataSet d) = [ (b, f (fst b)) | b <- d ]
+
+-- | Calcula a acuracia
+acurracy :: ([Feature] -> Class) -> DataSet -> Float
+acurracy f (DataSet d) = fromIntegral (length (filter (\x -> x) (checkPredicts f (DataSet d)))) / fromIntegral (length d)
