@@ -3,7 +3,7 @@
   (require [com.hypirion.clj-xchart :as c])
   (:gen-class))
 
-(def data-url (atom "src/data/iris.data"))
+(def data-url (atom "src/data/out.data"))
 
 (def file-lines (slurp @data-url))
 
