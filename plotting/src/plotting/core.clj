@@ -1,10 +1,11 @@
 (ns plotting.core
   (require [clojure.string :as str])
-  (require [com.hypirion.clj-xchart :as c]))
+  (require [com.hypirion.clj-xchart :as c])
+  (:gen-class))
 
-(def data-url "src/data/iris_nb.data")
+(def data-url (atom "src/data/iris.data"))
 
-(def file-lines (slurp data-url))
+(def file-lines (slurp @data-url))
 
 (defn process-content
   [str xPos yPos]
@@ -47,3 +48,11 @@
 (defn export-png 
   [name]
   (c/spit (gen-chart data) (str "src/charts/" name ".png")))
+
+(defn -main
+  [& args]
+  (do 
+    (println "Loading .data...")
+    (swap! data-url (fn [_] (str "src/data/" (nth args 0))))
+    (println "Loading " @data-url)
+    (export-png (nth args 1))))
