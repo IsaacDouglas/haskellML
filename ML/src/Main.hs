@@ -11,7 +11,7 @@ main = do
   putStrLn "hello world"
   
   -- Abre o arquivo .data e cria o DataSet
-  file <- readFile "data/iris.data"
+  file <- readFile "../data/iris.data"
   let dataSet = makeDataSet file '\n'
 
   -- variar de 0 a 0.4
@@ -27,21 +27,9 @@ main = do
   let predict = predictNaive train
 
   -- | Mostra a precisao
-  print $ precision predict test
-
-  -- let bool = checkPredicts predict $ test
-  -- let filterr = zip bool test
+  putStrLn $ "Precision: " ++ show (precision predict test)
 
   -- | Escreve no arquivo o DataSet de teste
-  writeFile "data/out.data" (intercalate "\n" $ printDataSet test)
+  writeFile "../data/out.data" (intercalate "\n" $ printDataSet test)
 
-  -- print $ predict [5.1,3.5,1.4,0.2] -- Iris-setosa
-  -- print $ predict [5.1,2.5,3.0,1.1] -- Iris-versicolor
-  -- print $ predict [6.4,3.1,5.5,1.8] -- Iris-virginica
-  -- print $ predict [5.9,3.2,4.8,1.8] -- Iris-versicolor classificou como Iris-virginica
-  
-  -- print $ sizeDS $ test
-  -- print $ sizeDS $ train
-  -- print $ checkPredicts predict $ test
-  -- print $ checkPredicts2 predict $ test
   return ()
