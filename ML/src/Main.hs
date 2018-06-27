@@ -29,7 +29,10 @@ main = do
   -- | Mostra a precisao
   putStrLn $ "Precision: " ++ show (precision predict test)
 
+  -- | DataSet com as classes preditas pelo classificador
+  let resultPredict = predictDataSetResult predict test
+
   -- | Escreve no arquivo o DataSet de teste
-  writeFile "../data/out.data" (intercalate "\n" $ printDataSet test)
+  writeFile "../data/out.data" (intercalate "\n" $ printDataSet resultPredict)
 
   return ()

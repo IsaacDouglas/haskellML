@@ -128,7 +128,7 @@ ordRandom p n = do
 checkPredict :: ([Feature] -> Class) -> Instance -> Bool
 checkPredict f i = f (fst i) == snd i
 
--- | Verifica uma lista de de predicao
+-- | Verifica uma lista de predicao
 checkPredicts :: ([Feature] -> Class) -> DataSet -> [Bool]
 checkPredicts f (DataSet d) = [ f (fst b) == snd b | b <- d ]
 
@@ -151,3 +151,7 @@ contains :: Char -> [Char] -> Bool
 contains c [] = False
 contains c (x:xs) | c == x = True
                   | otherwise = contains c xs
+
+-- | Retorna um DataSet com as classes preditas pelo classificador
+predictDataSetResult :: ([Feature] -> Class) -> DataSet -> DataSet
+predictDataSetResult c (DataSet d) = DataSet [ (x, (c x)) | (x, y) <- d ]
